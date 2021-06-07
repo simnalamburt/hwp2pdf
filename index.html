@@ -50,4 +50,5 @@ b.append('format','')
 b.append('args','')
 let p=await fetch('https://cors.bridged.cc/https://viewer.whale.naver.com/webhwpctrl/pdf',{method:'POST',body:b})
 let r=await p.json()
+delete document.body.dataset.c
 location.href=`https://viewer.whale.naver.com/webhwpctrl/print/${r.uniqueId}/${r.fileName}?token=${p.headers.get('Webhwpctrl-Auth-Token')}`}</script>

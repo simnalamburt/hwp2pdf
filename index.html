@@ -1,9 +1,8 @@
 <!doctype html><meta
 charset=utf-8><title>HWP to PDF</title><meta
 name=viewport
-content=width=device-width,initial-scale=1><style>body{margin:0;padding:0.5rem
-2rem;height:100vh;display:grid;place-content:center;font-family:sans-serif;font-size:2rem}body::before{content:'📄 PDF로 바꿀 HWP 파일을 업로드하세요!';place-self:center}#file{padding:2.5rem
-0;width:100%;font-size:1.3rem;text-align:center;color:transparent}#file::file-selector-button{display:block;margin:0
+content=width=device-width,initial-scale=1><style>body{margin:0;height:100vh;display:grid;place-content:center;font-family:sans-serif;text-align:center;word-break:keep-all}body::before{font-size:2rem;content:'📄 PDF로 바꿀 HWP 파일을 업로드하세요!'}#file{padding:2.5rem
+0;width:100%;font-size:1.3rem;color:transparent}#file::file-selector-button{display:block;margin:0
 auto;padding:1.3rem
 4rem;border-radius:2.8rem;border:none;box-shadow:0
 10px
@@ -11,7 +10,7 @@ auto;padding:1.3rem
 #91a7ff;background:#4263eb;transition:background
 0.2s;font-size:3rem;color:white}#file::file-selector-button:hover{background:#364fc7}body[data-c]::before{content:'🚧 변환중...'}body[data-c]
 #file{color:gray}body[data-c]
-#file::file-selector-button{display:none}</style><form><input
+#file::file-selector-button{display:none}p{color:#aaa}a{color:inherit}a:not(:hover){text-decoration:none}img{height:1em}</style><form><input
 id=file
 type=file
 name=openFile
@@ -24,7 +23,22 @@ name=format
 value><input
 type=hidden
 name=args
-value><script>async function H(e){e.preventDefault()
+value></form><p><a
+href=https://whale.naver.com
+target=_blank>Powered
+by
+<b>Naver
+Whale</b>
+<img
+src=https://upload.wikimedia.org/wikipedia/ko/7/7a/Naver_whale_logo.png
+alt="Logo of Naver Whale"></a>
+&nbsp;
+|
+&nbsp;
+<a
+href=https://github.com/simnalamburt/hwp2pdf>Source
+Code
+<script>async function H(e){e.preventDefault()
 document.body.dataset.c=1
 let b=new FormData()
 b.append('hwpj',new Blob([(await(await fetch('https://viewer.whale.naver.com/webhwpctrl/open',{method:'POST',body:new FormData(file.form)})).json()).json]))

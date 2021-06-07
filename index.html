@@ -1,0 +1,83 @@
+<!doctype html>
+<meta charset=utf-8>
+<title>HWP to PDF</title>
+<meta name=viewport content=width=device-width,initial-scale=1>
+<style>
+body {
+  margin: 0;
+  height: 100vh;
+  display: grid;
+  place-content: center;
+  font-family: sans-serif;
+  font-size: 2rem;
+}
+
+input[type=file] {
+  width: 100%;
+  padding: 1.5em 0 0;
+  font-size: 1.3rem;
+  text-align: center;
+  color: gray;
+  overflow: visible;
+}
+input[type=file]::file-selector-button {
+  display: block;
+  margin: 0 auto 1em;
+  padding: 0.5em 2em;
+  border-radius: 2em;
+  border: none;
+  background: #4263eb;
+  transition: background 0.2s;
+  color: white;
+  box-shadow: 0 10px 25px #91a7ff;
+  font-size: 3rem;
+}
+input[type=file]::file-selector-button:hover {
+  background: #364fc7;
+}
+</style>
+
+<span>📄 PDF로 바꿀 HWP 파일을 업로드하세요!</span>
+<form>
+  <input
+    id=file
+    type=file
+    name=openFile
+    title="HWP file to convert into PDF"
+    accept=.hwp
+    required
+    onchange=handleChange(event)
+  >
+  <input type=hidden name=format value>
+  <input type=hidden name=args value>
+</form>
+
+<script type=module>
+const uuidv4 = () => [4, 2, 2, 2, 6].map(len =>
+    [...crypto.getRandomValues(new Uint8Array(len))]
+      .map(n => n.toString(16).padStart(2, '0')).join('')
+  ).join('-')
+
+window.handleChange = async event => {
+  event.preventDefault()
+
+  const open = await fetch('https://viewer.whale.naver.com/webhwpctrl/open', {
+    method: 'POST', body: new FormData(event.target.form), })
+  const { json: hwpj } = await open.json()
+
+  const body = new FormData()
+  body.append('hwpj', new Blob([hwpj]))
+  body.append('id', uuidv4())
+  body.append('filename', event.target.files[0].name)
+  body.append('format', '')
+  body.append('args', '')
+
+  // NOTE: "Access-Control-Expose-Headers: Webhwpctrl-Auth-Token" is required
+  const pdf = await fetch('https://cors.bridged.cc/https://viewer.whale.naver.com/webhwpctrl/pdf', {
+    method: 'POST', body })
+  const token = pdf.headers.get('Webhwpctrl-Auth-Token')
+  const { uniqueId, fileName } = await pdf.json()
+
+  window.open(`https://viewer.whale.naver.com/webhwpctrl/print/${uniqueId}/${fileName}?token=${token}`, '_blank')
+}
+</script>
